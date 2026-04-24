@@ -23,7 +23,7 @@ The skill guides you through a structured onboarding flow — asking the right q
 
 ```bash
 mkdir -p ~/.claude/skills
-git clone https://github.com/oil-oil/ui-design-skill ~/.claude/skills/ui-design
+git clone https://github.com/oil-oil/draw-ui ~/.claude/skills/ui-design
 ```
 
 That's it. Claude Code will auto-discover the skill from `~/.claude/skills/`.
