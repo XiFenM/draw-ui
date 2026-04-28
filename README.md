@@ -28,7 +28,7 @@ Or clone manually:
 
 ```bash
 mkdir -p ~/.claude/skills
-git clone https://github.com/oil-oil/draw-ui ~/.claude/skills/ui-design
+git clone https://github.com/oil-oil/draw-ui ~/.claude/skills/draw-ui
 ```
 
 ## Usage

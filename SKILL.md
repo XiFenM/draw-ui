@@ -1,12 +1,12 @@
 ---
-name: ui-design
+name: draw-ui
 description: >
   Generate UI design mockups and help reconstruct generated UI screenshots into HTML/CSS. Prefer built-in image generation when available; use ZenMux + GPT Image 2 only as fallback or for scripted local outputs.
   TRIGGER when the user says "生成图片", "画图", "设计 UI", "UI 设计", "出图", "create an image", "design a screen",
   "landing page", "设计稿还原", "截图还原 HTML", "把图片复刻成网页", or when another skill needs image generation.
 ---
 
-# UI Design Skill
+# Draw UI Skill
 
 Prefer the built-in image generation tool when it is available in the current agent/runtime. It is usually simpler, avoids provider drift, and produced landing page mockups at the same quality level as ZenMux in our comparison.
 
