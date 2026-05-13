@@ -3,7 +3,8 @@ name: draw-ui
 description: >
   Generate UI design mockups and help reconstruct generated UI screenshots into HTML/CSS. Prefer built-in image generation when available; use ZenMux + GPT Image 2 only as fallback or for scripted local outputs.
   TRIGGER when the user says "生成图片", "画图", "设计 UI", "UI 设计", "出图", "create an image", "design a screen",
-  "landing page", "设计稿还原", "截图还原 HTML", "把图片复刻成网页", or when another skill needs image generation.
+  "landing page", "风格复现", "页面复现", "prompt-reference", "设计稿还原", "截图还原 HTML", "把图片复刻成网页",
+  or when another skill needs image generation.
 ---
 
 # Draw UI Skill
@@ -52,6 +53,33 @@ Use `scripts/ask_draw.sh` only when built-in image generation is unavailable, wh
 
 ---
 
+## 项目风格复现模式
+
+当仓库里有 `design/prompt-reference.md`、品牌设计系统、PRD、页面拆分文档，或用户要求“按某套提示词框架复现”时，不要只使用通用的类比法/清单法。先读取这些项目文档，并把它们整理成可复用的 prompt pack：
+
+1. **全局母版**：品牌定位、视觉关键词、色彩、字体、图形母题、组件语言、整体质感。
+2. **参考图角色**：在 prompt 开头说明参考图用于锁定哪些不变量，例如导航、logo、材质、光影、卡片语言、整体气质；同时说明哪些内容区可以重新设计。
+3. **页面结构**：从页面拆分文档提取模块顺序、关键组件和信息密度，不要只给抽象页面名。
+4. **真实内容样例**：给标题、标签、数据、日期、按钮文案；避免 placeholder。
+5. **负向约束**：提取项目专属禁区，例如不要页游化、不要紫色霓虹、不要正文书法、不要装饰压过信息。
+
+推荐拼接顺序：
+
+```text
+Reference image role: ...
+Create a <asset type> for <brand/page/route>.
+Style capsule: <global visual mother prompt, compressed>.
+Page goal: ...
+Required sections: ...
+Real example content: ...
+Must preserve: ...
+Avoid: <project negative prompt>.
+```
+
+这类“复现模式”的目标是保持项目视觉 DNA。可以写少量布局结构和页面模块，因为复现一致性比自由创意更重要；但不要写细碎像素规格，除非用户明确要求。
+
+---
+
 ## 设计稿还原为 HTML 的素材策略
 
 当用户想把生成图、截图或设计稿还原成 HTML/CSS 时，先读取 `references/html-reconstruction.md`。核心原则：页面结构优先代码化；logo、品牌符号、复杂插画、3D/玻璃质感、半透明渐变等难复刻视觉元素要素材化。裁图只作为图生图参考和定位依据，最终放进 HTML 的复杂资产要用图生图重绘，再裁边、抠图和清理边缘。
@@ -63,6 +91,8 @@ Use `scripts/ask_draw.sh` only when built-in image generation is unavailable, wh
 ## 构建提示词
 
 ### 两种经过验证有效的写法
+
+如果是项目风格复现，优先使用上面的 prompt pack 拼接；下面两种写法用于没有成熟项目 prompt 的普通 UI 设计，或作为 prompt pack 中的补充。
 
 **类比法（创意效果最好）**
 说"这个工具像什么"，让 AI 借用那个参照物的设计语言，而不是描述布局。
@@ -81,10 +111,12 @@ Use `scripts/ask_draw.sh` only when built-in image generation is unavailable, wh
 ### 质量规则
 
 - **不写排版规格**（像素、列数、padding）— 描述越具体，AI 越像在执行指令而不是做设计，结果反而更差
+- 复现已有视觉系统时，可以写页面模块、组件、内容密度和视觉不变量；这些不是像素规格，是保持一致性的必要约束
 - **给真实示例数据**，不用 placeholder — `"2.3M views, 180K saves"` 比 `"显示播放量"` 效果好十倍
 - **颜色用 HEX**，不用 HSL — `#f9f5f0` 比 `hsl(28 25% 97%)` 对模型更准确
 - 如果传了参考图，在 prompt 开头明确说明哪些区域需要保持不变
-- **Prompt 控制在 800 字以内** — 超长会导致 server disconnect
+- 使用 ZenMux / `scripts/ask_draw.sh` 时，**Prompt 控制在 800 字以内** — 超长会导致 server disconnect
+- 使用内置生图工具时，可以略长，但要把参考图角色、品牌视觉、页面结构和负向约束前置；长 prompt 只保留会影响画面的信息
 
 ---
 
